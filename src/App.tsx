@@ -32,58 +32,63 @@ export default function App() {
   const [cats, setCats] = useState<Cat[]>([]);
   const [chosenCat, setChosenCat] = useState<Cat | null>(null);
   const [catImage, setCatImage] = useState<string | null>(null);
+  const [score, setScore] = useState<number>(0);
 
   useEffect(() => {
-    const initializeGame = async () => {
-      const randomCats = getRandomCats();
-      setCats(randomCats);
-
-      const chosen = chooseRandomCat(randomCats);
-      setChosenCat(chosen);
-
-      try {
-        const response = await fetch(
-          `https://api.thecatapi.com/v1/images/search?breed_ids=${chosen.id}`
-        );
-        const data: CatImage[] = await response.json();
-        if (data.length > 0) {
-          setCatImage(data[0].url);
-        }
-      } catch (error) {
-        console.error("error fetching cat image:", error);
-      }
-    };
-
     initializeGame();
   }, []);
 
+  const initializeGame = async () => {
+    const randomCats = getRandomCats();
+    setCats(randomCats);
+
+    const chosen = chooseRandomCat(randomCats);
+    setChosenCat(chosen);
+
+    try {
+      const response = await fetch(
+        `https://api.thecatapi.com/v1/images/search?breed_ids=${chosen.id}`
+      );
+      const data: CatImage[] = await response.json();
+
+      if (data.length > 0) {
+        setCatImage(data[0].url);
+      }
+    } catch (error) {
+      console.error("error fetching cat image:", error);
+    }
+  };
+
   const checkAnswer = (selectedCat: Cat) => {
     if (selectedCat.id === chosenCat?.id) {
+      setScore(score + 1);
       console.log("correct cat!");
+      initializeGame();
     } else {
       console.log("wrong cat");
+      initializeGame();
     }
   };
 
   const buttonColors = [
-    "bg-red-400",
-    "bg-yellow-400",
-    "bg-blue-400",
-    "bg-green-400",
+    "bg-red-500",
+    "bg-yellow-500",
+    "bg-blue-500",
+    "bg-green-500",
   ];
 
   return (
     <div className="flex flex-col gap-4">
       <div>
         <p className="text-3xl">Cat Game</p>
-        <div className="gap-4">
-          {catImage && <img src={catImage} className="h-32 my-3" />}
+        <div className="gap-4 mx-auto">
+          {catImage && <img src={catImage} className="h-40 my-3" />}
           <ul>
             {cats.map((cat, index) => (
               <li key={index} className="mb-2">
                 <button
                   onClick={() => checkAnswer(cat)}
-                  className={`border-[1px] py-2 px-2 rounded-xl shadow-xl text-zinc-700 ${
+                  className={`border-[1px] py-2 px-2 rounded-xl shadow-xl text-zinc-100 ${
                     buttonColors[index % buttonColors.length]
                   }`}
                 >
@@ -93,6 +98,8 @@ export default function App() {
             ))}
           </ul>
         </div>
+
+        <p>{score}/10</p>
       </div>
     </div>
   );
