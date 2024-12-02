@@ -11,9 +11,12 @@ interface CatImage {
 
 const getRandomCats = (): Cat[] => {
   let list_of_cats: Cat[] = [];
+
   for (let i = 0; i < 4; i++) {
     let random_value: number = Math.floor(Math.random() * breeds.length);
+
     let random_cat: Cat = breeds[random_value] as Cat;
+
     list_of_cats.push(random_cat);
   }
   return list_of_cats;
@@ -21,18 +24,20 @@ const getRandomCats = (): Cat[] => {
 
 const chooseRandomCat = (cats: Cat[]): Cat => {
   let random_index_value: number = Math.floor(Math.random() * cats.length);
+
   return cats[random_index_value];
 };
 
 export default function App() {
   const [cats, setCats] = useState<Cat[]>([]);
-  const [_, setChosenCat] = useState<Cat | null>(null);
+  const [chosenCat, setChosenCat] = useState<Cat | null>(null);
   const [catImage, setCatImage] = useState<string | null>(null);
 
   useEffect(() => {
     const initializeGame = async () => {
       const randomCats = getRandomCats();
       setCats(randomCats);
+
       const chosen = chooseRandomCat(randomCats);
       setChosenCat(chosen);
 
@@ -45,12 +50,20 @@ export default function App() {
           setCatImage(data[0].url);
         }
       } catch (error) {
-        console.error("Error fetching cat image:", error);
+        console.error("error fetching cat image:", error);
       }
     };
 
     initializeGame();
   }, []);
+
+  const checkAnswer = (selectedCat: Cat) => {
+    if (selectedCat.id === chosenCat?.id) {
+      console.log("correct cat!");
+    } else {
+      console.log("wrong cat");
+    }
+  };
 
   const buttonColors = [
     "bg-red-400",
@@ -69,6 +82,7 @@ export default function App() {
             {cats.map((cat, index) => (
               <li key={index} className="mb-2">
                 <button
+                  onClick={() => checkAnswer(cat)}
                   className={`border-[1px] py-2 px-2 rounded-xl shadow-xl text-zinc-700 ${
                     buttonColors[index % buttonColors.length]
                   }`}
