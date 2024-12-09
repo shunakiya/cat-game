@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import breeds from "./assets/breeds.json";
+// import CatInfoCard from "./components/CatInfoCard";
 import { Cat } from "./Cat";
 
 interface CatImage {
@@ -68,6 +69,10 @@ export default function App() {
       console.log("wrong cat");
       initializeGame();
     }
+  };
+
+  const nextRound = () => {
+    setgame;
   };
 
   const buttonColors = [
