@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import breeds from "./assets/breeds.json";
-// import CatInfoCard from "./components/CatInfoCard";
+import CatInfoCard from "./components/CatInfoCard";
 import { Cat } from "./Cat";
 
 interface CatImage {
@@ -34,6 +34,8 @@ export default function App() {
   const [chosenCat, setChosenCat] = useState<Cat | null>(null);
   const [catImage, setCatImage] = useState<string | null>(null);
   const [score, setScore] = useState<number>(0);
+  const [showResult, setShowResult] = useState<boolean>(false);
+  const [selectedCat, setSelectedCat] = useState<Cat | null>(null);
 
   useEffect(() => {
     initializeGame();
@@ -60,19 +62,18 @@ export default function App() {
     }
   };
 
-  const checkAnswer = (selectedCat: Cat) => {
-    if (selectedCat.id === chosenCat?.id) {
+  const checkAnswer = (selected: Cat) => {
+    setSelectedCat(selected);
+    setShowResult(true);
+    if (selected.id === chosenCat?.id) {
       setScore(score + 1);
-      console.log("correct cat!");
-      initializeGame();
-    } else {
-      console.log("wrong cat");
-      initializeGame();
     }
   };
 
   const nextRound = () => {
-    setgame;
+    setShowResult(false);
+    setSelectedCat(null);
+    initializeGame();
   };
 
   const buttonColors = [
@@ -87,24 +88,40 @@ export default function App() {
       <div>
         <p className="text-3xl">Cat Game</p>
         <div className="gap-4 mx-auto">
-          {catImage && <img src={catImage} className="h-40 my-3" />}
-          <ul>
-            {cats.map((cat, index) => (
-              <li key={index} className="mb-2">
-                <button
-                  onClick={() => checkAnswer(cat)}
-                  className={`border-[1px] py-2 px-2 rounded-xl shadow-xl text-zinc-100 ${
-                    buttonColors[index % buttonColors.length]
-                  }`}
-                >
-                  {cat.name}
-                </button>
-              </li>
-            ))}
-          </ul>
+          {catImage && <img src={catImage} className="h-40 my-3" alt="Cat" />}
+          {!showResult ? (
+            <ul>
+              {cats.map((cat, index) => (
+                <li key={index} className="mb-2">
+                  <button
+                    onClick={() => checkAnswer(cat)}
+                    className={`border-[1px] py-2 px-2 rounded-xl shadow-xl text-zinc-100 ${
+                      buttonColors[index % buttonColors.length]
+                    }`}
+                  >
+                    {cat.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <>
+              {chosenCat && (
+                <CatInfoCard
+                  cat={chosenCat}
+                  isCorrect={selectedCat?.id === chosenCat.id}
+                />
+              )}
+              <button
+                onClick={nextRound}
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+              >
+                Next Round
+              </button>
+            </>
+          )}
         </div>
-
-        <p>{score}/10</p>
+        <p>Score: {score}/10</p>
       </div>
     </div>
   );
