@@ -13,10 +13,10 @@ export default function CatInfoCard({ cat, isCorrect }: CatInfoCardProps) {
           isCorrect ? "bg-green-100" : "bg-red-100"
         }`}
       >
-        <p className="text-xl font-medium">{cat.name}</p>
+        <p className="text-xl font-medium mb-2">{cat.name}</p>
         <p>{cat.description}</p>
         <p>Origin: {cat.origin}</p>
-        <p>Hypoallergenic: {cat.hypoallergenic}</p>
+        <p>Hypoallergenic: {cat.hypoallergenic ? "Yes" : "No"}</p>
       </div>
     </div>
   );

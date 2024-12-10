@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import breeds from "./assets/breeds.json";
-import CatInfoCard from "./components/CatInfoCard";
-import { Cat } from "./Cat";
+import breeds from "../assets/breeds.json";
+import CatInfoCard from "../components/CatInfoCard";
+import { Cat } from "../Cat";
 
 interface CatImage {
   id: string;
@@ -88,7 +88,7 @@ export default function App() {
       <div>
         <p className="text-3xl">Cat Game</p>
         <div className="gap-4 mx-auto">
-          {catImage && <img src={catImage} className="h-40 my-3" alt="Cat" />}
+          {catImage && <img src={catImage} className="h-52 my-3" alt="Cat" />}
           {!showResult ? (
             <ul>
               {cats.map((cat, index) => (
