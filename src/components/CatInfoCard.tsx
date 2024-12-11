@@ -16,6 +16,9 @@ export default function CatInfoCard({ cat, isCorrect }: CatInfoCardProps) {
         <p className="text-xl font-medium mb-2">{cat.name}</p>
         <p>{cat.description}</p>
         <p>Origin: {cat.origin}</p>
+        <p>Temperament: {cat.temperament}</p>
+        <p>Affection Level: {cat.affection_level}</p>
+        <p>Life Span: {cat.life_span}</p>
         <p>Hypoallergenic: {cat.hypoallergenic ? "Yes" : "No"}</p>
       </div>
     </div>
